@@ -9,7 +9,7 @@ typedef struct coor{
 
 coor board[9][9];
 
-void onlyChoice(void);
+int onlyChoice(void);
 
 void initChoices(void){
     for(int i = 0; i < 9; i++){
@@ -43,10 +43,11 @@ void updateChoices(int x, int y){
     }
 }
 
-void onlyChoice(void){
+int onlyChoice(void){
     int numbersY[9];
     int numbersX[9];
     int numbersBox[9];
+    int totalAnswers = 0;
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
             for(int x = 0; x < 9; x++){
@@ -63,6 +64,7 @@ void onlyChoice(void){
                 for(int j = 0; j < 9; j++){
                     if(board[i][j].choices[n] == 1){
                         printf("fant tallet: %d i posisjonen (%d,%d) i en kollonne\n", n+1, j+1, i+1);
+                        totalAnswers++;
                         board[i][j].number = n+1;
                         updateChoices(i, j);
                     }
@@ -77,6 +79,7 @@ void onlyChoice(void){
                 for(int j = 0; j < 9; j++){
                     if(board[j][i].choices[n] == 1){
                         printf("fant tallet: %d i posisjonen (%d,%d) i en rad\n", n+1, i+1, j+1);
+                        totalAnswers++;
                         board[j][i].number = n+1;
                         updateChoices(j, i);
                     }
@@ -108,6 +111,7 @@ void onlyChoice(void){
                     for(int k = 0; k < 3; k++){
                         if(board[(i*3)+k][(j*3)+k].choices[n] == 1){
                             printf("fant tallet: %d i posisjonen (%d,%d) i en boks\n", n+1, (i*3)+k+1, (j*3)+k+1);
+                            totalAnswers++;
                             board[(i*3)+k][(j*3)+k].number = n+1;
                             updateChoices((i*3)+k, (j*3)+k);
                         }
@@ -118,7 +122,7 @@ void onlyChoice(void){
             memset(numbersBox, 0, 9);
         }
     }
-
+    return totalAnswers;
 }
 
 void initBoard(void){
@@ -191,6 +195,11 @@ int answer(void){
             choices = 0;
         }
     }
+
+    int extra = onlyChoice();
+
+    totalAnswers += extra;
+
     return totalAnswers;
 }
 
@@ -203,7 +212,6 @@ int main(void){
     
     
     while(answer()){
-        onlyChoice();
     }
    printf("\nBrettet ser nå slik ut: \n");
    printBoard();
