@@ -7,6 +7,14 @@ typedef struct coor{
     int choices[9];
 } coor;
 
+typedef struct test{
+    int ammount;
+    int locX;
+    int locY;
+    int locX2;
+    int locY2;
+} test;
+
 coor board[9][9];
 
 int onlyChoice(void);
@@ -43,10 +51,155 @@ void updateChoices(int x, int y){
     }
 }
 
+int shadowChoice(void){
+    test number[9];
+    int totalAnswers = 0;
+
+    for(int i = 0; i < 9; i++){
+        number[i].ammount = 0;
+    }
+
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 3; j++){
+            for(int x = 0; x < 9; x++){
+                if(board[i*3][j*3].choices[x] == 1){
+                    if(number[x].ammount == 0){
+                        number[x].locX = 3*i;
+                        number[x].locY = 3*j;
+                    }else{
+                        number[x].locX2 = 3*i;
+                        number[x].locY2 = 3*j;
+                    }
+                    number[x].ammount++;
+                }
+                if(board[(i*3)+1][(j*3)].choices[x] == 1){
+                    if(number[x].ammount == 0){
+                        number[x].locX = 3*i+1;
+                        number[x].locY = 3*j;
+                    }else{
+                        number[x].locX2 = 3*i;
+                        number[x].locY2 = 3*j;
+                    }
+                    number[x].ammount++;
+                }
+                if(board[(i*3)][(j*3)+1].choices[x] == 1){
+                    if(number[x].ammount == 0){
+                        number[x].locX = 3*i;
+                        number[x].locY = 3*j+1;
+                    }else{
+                        number[x].locX2 = 3*i;
+                        number[x].locY2 = 3*j;
+                    }
+                    number[x].ammount++;
+                }
+                if(board[(i*3)+1][(j*3)+1].choices[x] == 1){
+                    if(number[x].ammount == 0){
+                        number[x].locX = 3*i+1;
+                        number[x].locY = 3*j+1;
+                    }else{
+                        number[x].locX2 = 3*i;
+                        number[x].locY2 = 3*j;
+                    }
+                    number[x].ammount++;
+                }
+                if(board[(i*3)+2][(j*3)].choices[x] == 1){
+                    if(number[x].ammount == 0){
+                        number[x].locX = 3*i+2;
+                        number[x].locY = 3*j;
+                    }else{
+                        number[x].locX2 = 3*i;
+                        number[x].locY2 = 3*j;
+                    }
+                    number[x].ammount++;
+                }
+                if(board[(i*3)][(j*3)+2].choices[x] == 1){
+                    if(number[x].ammount == 0){
+                        number[x].locX = 3*i;
+                        number[x].locY = 3*j+2;
+                    }else{
+                        number[x].locX2 = 3*i;
+                        number[x].locY2 = 3*j;
+                    }
+                    number[x].ammount++;
+                }
+                if(board[(i*3)+2][(j*3)+1].choices[x] == 1){
+                    if(number[x].ammount == 0){
+                        number[x].locX = 3*i+2;
+                        number[x].locY = 3*j+1;
+                    }else{
+                        number[x].locX2 = 3*i;
+                        number[x].locY2 = 3*j;
+                    }
+                    number[x].ammount++;
+                }
+                if(board[(i*3)+1][(j*3)+2].choices[x] == 1){
+                    if(number[x].ammount == 0){
+                        number[x].locX = 3*i+1;
+                        number[x].locY = 3*j+2;
+                    }else{
+                        number[x].locX2 = 3*i;
+                        number[x].locY2 = 3*j;
+                    }
+                    number[x].ammount++;
+                }
+                if(board[(i*3)+2][(j*3)+2].choices[x] == 1){
+                    if(number[x].ammount == 0){
+                        number[x].locX = 3*i+2;
+                        number[x].locY = 3*j+2;
+                    }else{
+                        number[x].locX2 = 3*i;
+                        number[x].locY2 = 3*j;
+                    }
+                    number[x].ammount++;
+                }
+            }
+            for(int n = 0; n < 9; n++){
+                if(number[n].ammount == 2 && number[n].locX == number[n].locX2){
+                    for(int x = 0; x < 9; x++){
+                        for(int y = 0; y < 9; y++){
+                            if(x == number[n].locX){
+                                board[x][y].choices[n] = 0;
+                            }
+                        }
+                    }
+                    printf("fant en skyggestripe av tallet: %d i y = %d \n", n+1, number[n].locX+1);
+                    totalAnswers++;
+                }
+                if(number[n].ammount == 2 && number[n].locY == number[n].locY2){
+                    for(int x = 0; x < 9; x++){
+                        for(int y = 0; y < 9; y++){
+                            if(y == number[n].locY){
+                                board[x][y].choices[n] = 0;
+                            }
+                        }
+                    }
+                    printf("fant en skyggestripe av tallet: %d i x = %d %d, %d %d \n", n+1, number[n].locY+1, number[n].locX+1, number[n].locY2+1, number[n].locX2+1);
+                    totalAnswers++;
+                }
+            }
+            for(int i = 0; i < 9; i++){
+                number[i].ammount = 0;
+                number[i].locX = 0;
+                number[i].locY = 0;
+                number[i].locX2 = 0;
+                number[i].locY2 = 0;
+            }
+        }
+    }
+    return totalAnswers;
+}
+
 int onlyChoice(void){
     int numbersY[9];
     int numbersX[9];
-    int numbersBox[9];
+    test number[9];
+    
+    memset(numbersY, 0, 9);
+    memset(numbersX, 0, 9);
+    for(int i = 0; i < 9; i++){
+        number[i].ammount = 0;
+    }
+
     int totalAnswers = 0;
     for(int i = 0; i < 9; i++){
         for(int j = 0; j < 9; j++){
@@ -92,34 +245,68 @@ int onlyChoice(void){
 
     for(int i = 0; i < 3; i++){
         for(int j = 0; j < 3; j++){
-            for(int k = 0; k < 3; k++){
-                for(int x = 0; x < 9; x++){
-                    if(board[(i*3)+k][(j*3)].choices[x] == 1){
-                        numbersBox[x]++;
-                    }
-                    if(board[(i*3)][(j*3)+k].choices[x] == 1){
-                        numbersBox[x]++;
-                    }
-                    if(board[(i*3)+k][(j*3)+k].choices[x] == 1){
-                        numbersBox[x]++;
-                    }
+            for(int x = 0; x < 9; x++){
+                if(board[i*3][j*3].choices[x] == 1){
+                    number[x].ammount++;
+                    number[x].locX = 3*i;
+                    number[x].locY = 3*j;
+                }
+                if(board[(i*3)+1][(j*3)].choices[x] == 1){
+                    number[x].ammount++;
+                    number[x].locX = 3*i+1;
+                    number[x].locY = 3*j;
+                }
+                if(board[(i*3)][(j*3)+1].choices[x] == 1){
+                    number[x].ammount++;
+                    number[x].locX = 3*i;
+                    number[x].locY = 3*j+1;
+                }
+                if(board[(i*3)+1][(j*3)+1].choices[x] == 1){
+                    number[x].ammount++;
+                    number[x].locX = 3*i+1;
+                    number[x].locY = 3*j+1;
+                }
+                if(board[(i*3)+2][(j*3)].choices[x] == 1){
+                    number[x].ammount++;
+                    number[x].locX = 3*i+2;
+                    number[x].locY = 3*j;
+                }
+                if(board[(i*3)][(j*3)+2].choices[x] == 1){
+                    number[x].ammount++;
+                    number[x].locX = 3*i;
+                    number[x].locY = 3*j+2;
+                }
+                if(board[(i*3)+2][(j*3)+1].choices[x] == 1){
+                    number[x].ammount++;
+                    number[x].locX = 3*i+2;
+                    number[x].locY = 3*j+1;
+                }
+                if(board[(i*3)+1][(j*3)+2].choices[x] == 1){
+                    number[x].ammount++;
+                    number[x].locX = 3*i+1;
+                    number[x].locY = 3*j+2;
+                }
+                if(board[(i*3)+2][(j*3)+2].choices[x] == 1){
+                    number[x].ammount++;
+                    number[x].locX = 3*i+2;
+                    number[x].locY = 3*j+2;
                 }
             }
-
             for(int n = 0; n < 9; n++){
-                if(numbersBox[n] == 1){
-                    for(int k = 0; k < 3; k++){
-                        if(board[(i*3)+k][(j*3)+k].choices[n] == 1){
-                            printf("fant tallet: %d i posisjonen (%d,%d) i en boks\n", n+1, (i*3)+k+1, (j*3)+k+1);
-                            totalAnswers++;
-                            board[(i*3)+k][(j*3)+k].number = n+1;
-                            updateChoices((i*3)+k, (j*3)+k);
-                        }
-                        
+                if(number[n].ammount == 1){
+                    if(board[number[n].locX][number[n].locY].choices[n] == 1){
+                        printf("fant tallet: %d i posisjonen (%d,%d) i en boks\n", n+1, number[n].locY+1, number[n].locX+1);
+                        totalAnswers++;
+                        board[number[n].locX][number[n].locY].number = n+1;
+                        updateChoices(number[n].locX, number[n].locY);
                     }
                 }
             }
-            memset(numbersBox, 0, 9);
+            for(int i = 0; i < 9; i++){
+                number[i].ammount = 0;
+                number[i].locX = 0;
+                number[i].locY = 0;
+            }
         }
     }
     return totalAnswers;
@@ -197,8 +384,10 @@ int answer(void){
     }
 
     int extra = onlyChoice();
+    //int extra2 = shadowChoice();
 
     totalAnswers += extra;
+    //totalAnswers += extra2;
 
     return totalAnswers;
 }
