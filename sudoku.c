@@ -11,9 +11,12 @@ typedef struct test{
     int ammount;
     int locX;
     int locY;
-    int locX2;
-    int locY2;
 } test;
+
+typedef struct forslag{
+    int locX;
+    int locY;
+} forslag;
 
 coor board[9][9];
 
@@ -51,142 +54,93 @@ void updateChoices(int x, int y){
     }
 }
 
-int shadowChoice(void){
-    test number[9];
-    int totalAnswers = 0;
+//parameter tall er tallverdiene den sjekker for
+int kvadrantSjekk(int x, int y, int tall, forslag *answers){
+    answers->locX = 0; answers->locY = 0;
+    int endret = 0;
 
-    for(int i = 0; i < 9; i++){
-        number[i].ammount = 0;
-    }
-
-    for(int i = 0; i < 3; i++){
-        for(int j = 0; j < 3; j++){
-            for(int x = 0; x < 9; x++){
-                if(board[i*3][j*3].choices[x] == 1){
-                    if(number[x].ammount == 0){
-                        number[x].locX = 3*i;
-                        number[x].locY = 3*j;
-                    }else{
-                        number[x].locX2 = 3*i;
-                        number[x].locY2 = 3*j;
+    for(int kvadX = 0; kvadX < 3; kvadX++){
+        for(int kvadY = 0; kvadY < 3; kvadY++){
+            if(board[x*3+kvadX][y*3+kvadY].choices[tall]){
+                if(!endret){
+                    answers->locX = kvadX+1;
+                    answers->locY = kvadY+1;
+                    endret = 1;
+                }else{
+                    if(answers->locX != kvadX+1){
+                        answers->locX = 0;
                     }
-                    number[x].ammount++;
-                }
-                if(board[(i*3)+1][(j*3)].choices[x] == 1){
-                    if(number[x].ammount == 0){
-                        number[x].locX = 3*i+1;
-                        number[x].locY = 3*j;
-                    }else{
-                        number[x].locX2 = 3*i;
-                        number[x].locY2 = 3*j;
+                    if(answers->locY != kvadY+1){
+                        answers->locY = 0;
                     }
-                    number[x].ammount++;
                 }
-                if(board[(i*3)][(j*3)+1].choices[x] == 1){
-                    if(number[x].ammount == 0){
-                        number[x].locX = 3*i;
-                        number[x].locY = 3*j+1;
-                    }else{
-                        number[x].locX2 = 3*i;
-                        number[x].locY2 = 3*j;
-                    }
-                    number[x].ammount++;
-                }
-                if(board[(i*3)+1][(j*3)+1].choices[x] == 1){
-                    if(number[x].ammount == 0){
-                        number[x].locX = 3*i+1;
-                        number[x].locY = 3*j+1;
-                    }else{
-                        number[x].locX2 = 3*i;
-                        number[x].locY2 = 3*j;
-                    }
-                    number[x].ammount++;
-                }
-                if(board[(i*3)+2][(j*3)].choices[x] == 1){
-                    if(number[x].ammount == 0){
-                        number[x].locX = 3*i+2;
-                        number[x].locY = 3*j;
-                    }else{
-                        number[x].locX2 = 3*i;
-                        number[x].locY2 = 3*j;
-                    }
-                    number[x].ammount++;
-                }
-                if(board[(i*3)][(j*3)+2].choices[x] == 1){
-                    if(number[x].ammount == 0){
-                        number[x].locX = 3*i;
-                        number[x].locY = 3*j+2;
-                    }else{
-                        number[x].locX2 = 3*i;
-                        number[x].locY2 = 3*j;
-                    }
-                    number[x].ammount++;
-                }
-                if(board[(i*3)+2][(j*3)+1].choices[x] == 1){
-                    if(number[x].ammount == 0){
-                        number[x].locX = 3*i+2;
-                        number[x].locY = 3*j+1;
-                    }else{
-                        number[x].locX2 = 3*i;
-                        number[x].locY2 = 3*j;
-                    }
-                    number[x].ammount++;
-                }
-                if(board[(i*3)+1][(j*3)+2].choices[x] == 1){
-                    if(number[x].ammount == 0){
-                        number[x].locX = 3*i+1;
-                        number[x].locY = 3*j+2;
-                    }else{
-                        number[x].locX2 = 3*i;
-                        number[x].locY2 = 3*j;
-                    }
-                    number[x].ammount++;
-                }
-                if(board[(i*3)+2][(j*3)+2].choices[x] == 1){
-                    if(number[x].ammount == 0){
-                        number[x].locX = 3*i+2;
-                        number[x].locY = 3*j+2;
-                    }else{
-                        number[x].locX2 = 3*i;
-                        number[x].locY2 = 3*j;
-                    }
-                    number[x].ammount++;
-                }
-            }
-            for(int n = 0; n < 9; n++){
-                if(number[n].ammount == 2 && number[n].locX == number[n].locX2){
-                    for(int x = 0; x < 9; x++){
-                        for(int y = 0; y < 9; y++){
-                            if(x == number[n].locX){
-                                board[x][y].choices[n] = 0;
-                            }
-                        }
-                    }
-                    printf("fant en skyggestripe av tallet: %d i y = %d \n", n+1, number[n].locX+1);
-                    totalAnswers++;
-                }
-                if(number[n].ammount == 2 && number[n].locY == number[n].locY2){
-                    for(int x = 0; x < 9; x++){
-                        for(int y = 0; y < 9; y++){
-                            if(y == number[n].locY){
-                                board[x][y].choices[n] = 0;
-                            }
-                        }
-                    }
-                    printf("fant en skyggestripe av tallet: %d i x = %d %d, %d %d \n", n+1, number[n].locY+1, number[n].locX+1, number[n].locY2+1, number[n].locX2+1);
-                    totalAnswers++;
-                }
-            }
-            for(int i = 0; i < 9; i++){
-                number[i].ammount = 0;
-                number[i].locX = 0;
-                number[i].locY = 0;
-                number[i].locX2 = 0;
-                number[i].locY2 = 0;
             }
         }
     }
+
+    if(answers->locX || answers->locY){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+int fixChoiceLine(int x, int y, int z, forslag *answers){
+    int difference = 0;
+    if(answers->locX){
+        for(int y2 = 0; y2 < 9; y2++){
+            if(board[answers->locX+(x*3)-1][y2].choices[z] && y2 != (y*3) && y2 != (y*3)+1 && y2 != (y*3)+2){
+                board[answers->locX+(x*3)-1][y2].choices[z] = 0;
+                difference++;
+            }
+        }
+        if(difference){
+            printf("Fant en stripe av tallet %d i y = %d\n", z+1, answers->locX+(x*3));
+            return 1;
+        }
+    }else if(answers->locY){
+        for(int x2 = 0; x2 < 9; x2++){
+            if(board[x2][answers->locY+(y*3)-1].choices[z] && x2 != (x*3) && x2 != (x*3)+1 && x2 != (x*3)+2){
+                board[x2][answers->locY+(y*3)-1].choices[z] = 0;
+                difference++;
+            }
+        }
+        if(difference){
+            printf("Fant en stripe av tallet %d i x = %d\n", z+1, answers->locY+(y*3));
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int shadowChoice(void){
+    forslag answers; //hvilket kolonne eller rad i kvadranten(0,1,2,3->0 = ingen)
+    int totalAnswers = 0; //Antall svar koden fant
+
+    //x = x-koor, y = y-koor, z = spillertallene fra 1-9
+    for(int x = 0; x < 3; x++){
+        for(int y = 0; y < 3; y++){
+            for(int z = 0; z < 9; z++){
+                if(kvadrantSjekk(x,y,z, &answers)){
+                    totalAnswers += fixChoiceLine(x,y,z,&answers);
+                }
+            }
+
+        }
+    }
     return totalAnswers;
+}
+
+void numberUpdate(int x, int y, int z, test number[]){
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 3; j++){
+            if(board[(x*3)+i][(y*3)+j].choices[z]){
+                number[z].ammount++;
+                number[z].locX = 3*x+i;
+                number[z].locY = 3*y+j;
+            }
+        }
+    }
 }
 
 int onlyChoice(void){
@@ -246,51 +200,7 @@ int onlyChoice(void){
     for(int i = 0; i < 3; i++){
         for(int j = 0; j < 3; j++){
             for(int x = 0; x < 9; x++){
-                if(board[i*3][j*3].choices[x] == 1){
-                    number[x].ammount++;
-                    number[x].locX = 3*i;
-                    number[x].locY = 3*j;
-                }
-                if(board[(i*3)+1][(j*3)].choices[x] == 1){
-                    number[x].ammount++;
-                    number[x].locX = 3*i+1;
-                    number[x].locY = 3*j;
-                }
-                if(board[(i*3)][(j*3)+1].choices[x] == 1){
-                    number[x].ammount++;
-                    number[x].locX = 3*i;
-                    number[x].locY = 3*j+1;
-                }
-                if(board[(i*3)+1][(j*3)+1].choices[x] == 1){
-                    number[x].ammount++;
-                    number[x].locX = 3*i+1;
-                    number[x].locY = 3*j+1;
-                }
-                if(board[(i*3)+2][(j*3)].choices[x] == 1){
-                    number[x].ammount++;
-                    number[x].locX = 3*i+2;
-                    number[x].locY = 3*j;
-                }
-                if(board[(i*3)][(j*3)+2].choices[x] == 1){
-                    number[x].ammount++;
-                    number[x].locX = 3*i;
-                    number[x].locY = 3*j+2;
-                }
-                if(board[(i*3)+2][(j*3)+1].choices[x] == 1){
-                    number[x].ammount++;
-                    number[x].locX = 3*i+2;
-                    number[x].locY = 3*j+1;
-                }
-                if(board[(i*3)+1][(j*3)+2].choices[x] == 1){
-                    number[x].ammount++;
-                    number[x].locX = 3*i+1;
-                    number[x].locY = 3*j+2;
-                }
-                if(board[(i*3)+2][(j*3)+2].choices[x] == 1){
-                    number[x].ammount++;
-                    number[x].locX = 3*i+2;
-                    number[x].locY = 3*j+2;
-                }
+                numberUpdate(i,j,x,number);
             }
             for(int n = 0; n < 9; n++){
                 if(number[n].ammount == 1){
@@ -383,25 +293,19 @@ int answer(void){
         }
     }
 
-    int extra = onlyChoice();
-    //int extra2 = shadowChoice();
-
-    totalAnswers += extra;
-    //totalAnswers += extra2;
+    totalAnswers += onlyChoice();
+    totalAnswers += shadowChoice();
 
     return totalAnswers;
 }
 
 
 int main(void){
-    int modified = 1;
-
     initBoard();
     printBoard();
     
-    
-    while(answer()){
-    }
+    while(answer());
+
    printf("\nBrettet ser nå slik ut: \n");
    printBoard();
 
