@@ -3,6 +3,9 @@
 #include <string.h>
 
 int answer(void);
+int finished(void);
+int onlyChoice(void);
+int tester(void);
 
 typedef struct coor{
     int number;
@@ -20,7 +23,7 @@ typedef struct forslag{
     int locY;
 } forslag;
 
-typedef struct coorw{
+typedef struct coor2{
     int ammount;
     int locX;
     int locY;
@@ -30,7 +33,17 @@ typedef struct coorw{
 
 coor board[9][9];
 
-int onlyChoice(void);
+
+void copyBoard(coor source[9][9], coor dest[9][9]){
+    for(int x = 0; x < 9; x++){
+        for(int y = 0; y < 9; y++){
+            dest[x][y].number = source[x][y].number;
+            for(int choice = 0; choice < 9; choice++){
+                dest[x][y].choices[choice] = source[x][y].choices[choice];
+            }
+        }
+    }
+}
 
 void initChoices(void){
     for(int i = 0; i < 9; i++){
@@ -679,9 +692,16 @@ void printBoard(void){
 void printChoices(void){
     int x, y;
     int num;
+    char input[5];
 
     printf("Skriv inn koordinatene: \n");
-    scanf("%d", &x);
+    scanf("%s", &input);
+    if(!strcmp(input, "cheat")){
+        tester();
+        return;
+    }else{
+        x = atoi(input);
+    }
     scanf("%d", &y);
 
     printf("Tallet: %d\n", board[y-1][x-1].number);
@@ -699,6 +719,35 @@ void printChoices(void){
         printBoard();
     }
 
+}
+
+//cheats
+int tester(void){
+    coor copy[9][9];
+    copyBoard(board,copy);
+
+    for(int x = 0; x < 9; x++){
+        for(int y = 0; y < 9; y++){
+            if(!board[x][y].number){
+                for(int num = 0; num < 9; num++){
+                    if(board[x][y].choices[num]){
+                        printf("prøver tallet: %d i (%d,%d)\n", num+1, y+1, x+1);
+                        board[x][y].number = num+1;
+                        updateChoices(y,x);
+                        while(answer());
+                        if(finished()){
+                            printf("\nBrettet ser nå slik ut: \n");
+                            printBoard();
+                            return 1;
+                        }  
+                    }
+                    copyBoard(copy,board);
+                }
+            }
+        }
+    }
+
+    return 0;
 }
 
 int answer(void){
@@ -749,8 +798,8 @@ int main(void){
 
     while(answer());
 
-   printf("\nBrettet ser nå slik ut: \n");
-   printBoard();
+    printf("\nBrettet ser nå slik ut: \n");
+    printBoard();
 
     while(!finished()){
         printChoices();
