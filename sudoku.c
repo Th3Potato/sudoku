@@ -697,7 +697,7 @@ void printChoices(void){
     printf("Skriv inn koordinatene: \n");
     scanf("%s", &input);
     if(!strcmp(input, "cheat")){
-        tester();
+        printf("tries: %d\n", tester());
         return;
     }else{
         x = atoi(input);
@@ -723,6 +723,7 @@ void printChoices(void){
 
 //cheats
 int tester(void){
+    int tries = 0;
     coor copy[9][9];
     copyBoard(board,copy);
 
@@ -738,16 +739,17 @@ int tester(void){
                         if(finished()){
                             printf("\nBrettet ser nå slik ut: \n");
                             printBoard();
-                            return 1;
+                            return tries;
                         }  
                     }
+                    tries++;
                     copyBoard(copy,board);
                 }
             }
         }
     }
 
-    return 0;
+    return tries;
 }
 
 int answer(void){
