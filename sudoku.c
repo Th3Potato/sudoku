@@ -748,7 +748,8 @@ void printChoices(void){
     }
     scanf("%d", &y);
 
-    printf("Tallet: %d\n", board[y-1][x-1].number);
+    printf("\nTallet: %d\n", board[y-1][x-1].number);
+    printf("Muligheter: ");
     for(int i = 0; i < 9; i++){
         if(board[y-1][x-1].choices[i]){
             if(i != 8){
@@ -760,8 +761,8 @@ void printChoices(void){
         }
     }
 
-    printf("\nErstatt med: (0-9)\n");
-    scanf("%d\n", &num);
+    printf("\n\nErstatt med: (0-9)\n");
+    scanf("%d", &num);
     if(num > 0 && num <= 9){
         board[y-1][x-1].number = num;
         updateChoices(y-1,x-1);
