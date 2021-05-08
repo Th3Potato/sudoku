@@ -140,8 +140,10 @@ int updatePair(void){
                 }
             }
             if(difference){
-                printf("fant parene %d og %d i: %d,%d og %d,%d\n", tall1+1, tall2+1, 
-                answer.locY+1, x, answer.locY2+1, x+1);
+                if(comments){
+                    printf("fant parene %d og %d i: %d,%d og %d,%d\n", tall1+1, tall2+1, 
+                    answer.locY+1, x, answer.locY2+1, x+1);
+                }
                 totalAnswers++;
             }
             difference = 0;
@@ -161,8 +163,10 @@ int updatePair(void){
                 }
             }
             if(difference){
-                printf("fant parene %d og %d i: %d,%d og %d,%d\n", tall1+1, tall2+1, 
-                y+1, answer.locX+1, y+1, answer.locX2+1);
+                if(comments){
+                    printf("fant parene %d og %d i: %d,%d og %d,%d\n", tall1+1, tall2+1, 
+                    y+1, answer.locX+1, y+1, answer.locX2+1);
+                }                
                 totalAnswers++;
             }
             difference = 0;
@@ -230,8 +234,10 @@ int onlyTwo(void){
                         }
                     }
                     if(difference){
-                        printf("fant kun tallene %d og %d i %d,%d og %d,%d\n", 
+                        if(comments){
+                            printf("fant kun tallene %d og %d i %d,%d og %d,%d\n", 
                         num+1, num2+1, arr[num].locY+1, x+1, arr[num].locY2+1, x+1);
+                        }
                         totalAnswers++;
                     }
                     difference = 0;
@@ -271,8 +277,10 @@ int onlyTwo(void){
                         }
                     }
                     if(difference){
-                        printf("fant kun tallene %d og %d i %d,%d og %d,%d\n", 
-                        num+1, num2+1, y+1, arr[num].locX+1, y+1, arr[num].locX2+1);
+                        if(comments){
+                            printf("fant kun tallene %d og %d i %d,%d og %d,%d\n", 
+                            num+1, num2+1, y+1, arr[num].locX+1, y+1, arr[num].locX2+1);
+                        }                        
                         totalAnswers++;
                     }
                     difference = 0;
@@ -315,8 +323,10 @@ int onlyTwo(void){
                             }
                         }
                         if(difference){
-                            printf("fant kun tallene %d og %d i %d,%d og %d,%d (kvadrant)\n", 
-                            num+1, num2+1, arr[num].locY+1, arr[num].locX+1, arr[num].locY2+1, arr[num].locX2+1);
+                            if(comments){
+                                printf("fant kun tallene %d og %d i %d,%d og %d,%d (kvadrant)\n", 
+                                num+1, num2+1, arr[num].locY+1, arr[num].locX+1, arr[num].locY2+1, arr[num].locX2+1);
+                            }                            
                             totalAnswers++;
                         }
                         difference = 0;
@@ -370,7 +380,9 @@ int fixChoiceLine(int x, int y, int z, coor1 *answers){
             }
         }
         if(difference){
-            printf("fant en stripe av tallet %d i y = %d\n", z+1, answers->locX+(x*3));
+            if(comments){
+                printf("fant en stripe av tallet %d i y = %d\n", z+1, answers->locX+(x*3));
+            }
             return 1;
         }
     }else if(answers->locY){
@@ -381,7 +393,9 @@ int fixChoiceLine(int x, int y, int z, coor1 *answers){
             }
         }
         if(difference){
-            printf("fant en stripe av tallet %d i x = %d\n", z+1, answers->locY+(y*3));
+            if(comments){
+                printf("fant en stripe av tallet %d i x = %d\n", z+1, answers->locY+(y*3));
+            }            
             return 1;
         }
     }
@@ -453,11 +467,13 @@ int updateRowCol(int x, int y, int first, int sec, int third, int z, int ammount
         if(first / 3 == sec / 3){
             difference = rowcolUpdate(x,y,first,sec,third,z);
             if(difference){
-                if(x == -1){
-                    printf("fant tallet: %d i %d,%d og %d,%d\n", z+1, y+1, first+1, y+1, sec+1);
-                }else if(y == -1){
-                    printf("fant tallet: %d i %d,%d og %d,%d\n", z+1, first+1, x+1, sec+1, x+1);
-                }
+                if(comments){
+                    if(x == -1){
+                        printf("fant tallet: %d i %d,%d og %d,%d\n", z+1, y+1, first+1, y+1, sec+1);
+                    }else if(y == -1){
+                        printf("fant tallet: %d i %d,%d og %d,%d\n", z+1, first+1, x+1, sec+1, x+1);
+                    }
+                }                
                 totalAnswers++;
             }
         }
@@ -465,10 +481,12 @@ int updateRowCol(int x, int y, int first, int sec, int third, int z, int ammount
         if(first / 3 == sec / 3 && first / 3 == third / 3){
             difference = rowcolUpdate(x,y,first,sec,third,z);
             if(difference){
-                if(x == -1){
-                    printf("fant tallet: %d i %d,%d og %d,%d og %d,%d\n", z+1, y+1, first+1, y+1, sec+1, y+1, third+1);
-                }else if(y == -1){
-                    printf("fant tallet: %d i %d,%d og %d,%d og %d,%d\n", z+1, first+1, x+1, sec+1, x+1, third+1, x+1);
+                if(comments){
+                    if(x == -1){
+                        printf("fant tallet: %d i %d,%d og %d,%d og %d,%d\n", z+1, y+1, first+1, y+1, sec+1, y+1, third+1);
+                    }else if(y == -1){
+                        printf("fant tallet: %d i %d,%d og %d,%d og %d,%d\n", z+1, first+1, x+1, sec+1, x+1, third+1, x+1);
+                    }
                 }
                 totalAnswers++;
             }
@@ -570,7 +588,9 @@ int onlyOnePlace(void){
             if(numbersY[n] == 1){
                 for(int j = 0; j < 9; j++){
                     if(board[i][j].choices[n] == 1){
-                        printf("fant tallet: %d i posisjonen (%d,%d), eneste i raden\n", n+1, j+1, i+1);
+                        if(comments){
+                            printf("fant tallet: %d i posisjonen (%d,%d), eneste i raden\n", n+1, j+1, i+1);
+                        }                        
                         totalAnswers++;
                         board[i][j].number = n+1;
                         updateChoices(i, j);
@@ -585,7 +605,9 @@ int onlyOnePlace(void){
             if(numbersX[n] == 1){
                 for(int j = 0; j < 9; j++){
                     if(board[j][i].choices[n] == 1){
-                        printf("fant tallet: %d i posisjonen (%d,%d), eneste i kolonnen\n", n+1, i+1, j+1);
+                        if(comments){
+                            printf("fant tallet: %d i posisjonen (%d,%d), eneste i kolonnen\n", n+1, i+1, j+1);
+                        }
                         totalAnswers++;
                         board[j][i].number = n+1;
                         updateChoices(j, i);
@@ -605,7 +627,9 @@ int onlyOnePlace(void){
             for(int n = 0; n < 9; n++){
                 if(number[n].ammount == 1){
                     if(board[number[n].locX][number[n].locY].choices[n] == 1){
-                        printf("fant tallet: %d i posisjonen (%d,%d), eneste i en kvadranten\n", n+1, number[n].locY+1, number[n].locX+1);
+                        if(comments){
+                            printf("fant tallet: %d i posisjonen (%d,%d), eneste i en kvadranten\n", n+1, number[n].locY+1, number[n].locX+1);
+                        }
                         totalAnswers++;
                         board[number[n].locX][number[n].locY].number = n+1;
                         updateChoices(number[n].locX, number[n].locY);
@@ -635,7 +659,9 @@ int onlyChoice(void){
                 }
             }
             if(choices == 1){
-                printf("fant tallet: %d i posisjonen (%d,%d), eneste i koor\n", answerPos+1, j+1, i+1);
+                if(comments){
+                    printf("fant tallet: %d i posisjonen (%d,%d), eneste i koor\n", answerPos+1, j+1, i+1);
+                }
                 board[i][j].number = answerPos+1;
                 totalAnswers++;
                 updateChoices(i, j);
@@ -667,6 +693,20 @@ void initBoard(void){
     }
 }
 
+char *boardToString(void){
+    char* string = malloc(sizeof(char) * 81);
+    int letter = 0;
+
+    for(int x = 0; x < 9; x++){
+        for(int y = 0; y < 9; y++){
+            string[letter++] = board[x][y].number+'0';
+        }
+    }
+    //printf("%s\n", string);
+    
+    return string;
+}
+
 void printBoard(void){
     for(int i = 0; i < 9; i++){
         if(i == 3 || i == 6){
@@ -683,6 +723,15 @@ void printBoard(void){
     printf("\n");
 }
 
+int isUnique(char *boardString, char **boardArr){
+    for(int i = 0; i < 100; i++){
+        if(atoi(boardString) == atoi(boardArr[i])){
+            return 0;
+        }
+    }
+    return 1;
+}
+
 void printChoices(void){
     int x, y;
     int num;
@@ -690,8 +739,9 @@ void printChoices(void){
 
     printf("Skriv inn koordinatene: \n");
     scanf("%s", &input);
-    if(!strcmp(input, "cheat")){
-        printf("tries: %d\n", tester());
+    if(!strcmp(input, "solve") || !strcmp(input, "cheat")){
+        printf("\n");
+        tester();
         return;
     }else{
         x = atoi(input);
@@ -700,11 +750,18 @@ void printChoices(void){
 
     printf("Tallet: %d\n", board[y-1][x-1].number);
     for(int i = 0; i < 9; i++){
-        printf("%d", board[y-1][x-1].choices[i]);
+        if(board[y-1][x-1].choices[i]){
+            if(i != 8){
+                printf("%d, ", i+1);
+            }else{
+                printf("%d", i+1);
+            }
+            
+        }
     }
 
     printf("\nErstatt med: (0-9)\n");
-    scanf("%d", &num);
+    scanf("%d\n", &num);
     if(num > 0 && num <= 9){
         board[y-1][x-1].number = num;
         updateChoices(y-1,x-1);
@@ -715,9 +772,17 @@ void printChoices(void){
 
 }
 
-//cheats
-int tester(void){
+char **tester(void){
+    comments = 0;
+
     int tries = 0;
+    int answers = 0;
+    int uniques = 0;
+    char **allAnswers = malloc(sizeof(char) * 81 * 100);
+    for(int i = 0; i < 100; i++){
+        allAnswers[i] = "                                                                                 ";
+    }
+    char *boardString;
     coor copy[9][9];
     copyBoard(board,copy);
 
@@ -726,14 +791,21 @@ int tester(void){
             if(!board[x][y].number){
                 for(int num = 0; num < 9; num++){
                     if(board[x][y].choices[num]){
-                        printf("prøver tallet: %d i (%d,%d)\n", num+1, y+1, x+1);
+                        //printf("prøver tallet: %d i (%d,%d)\n", num+1, y+1, x+1);
                         board[x][y].number = num+1;
-                        updateChoices(y,x);
+                        updateChoices(x,y);
                         while(runAlgorithms());
                         if(finished()){
-                            printf("\nBrettet ser nå slik ut: \n");
-                            printBoard();
-                            return tries;
+                            boardString = boardToString();
+                            //printf("%s\n", boardString);
+                            if(isUnique(boardString,allAnswers)){
+                                printf("Tallet %d i (%d,%d) førte til en unik løsning\n", num+1, y+1, x+1);
+                                allAnswers[uniques] = boardString;
+                                uniques++;
+                            }else{
+                                //printf("Tallet %d i (%d,%d) førte til en løsning\n", num+1, y+1, x+1);
+                            }                            
+                            answers++;
                         }  
                     }
                     tries++;
@@ -742,8 +814,23 @@ int tester(void){
             }
         }
     }
+    printf("\nPrøvde %d forsøk. Fant %d løsninger, der %d er unike\n\n", tries, answers, uniques);
 
-    return tries;
+    int stringNum;
+    for(int solution = 0; solution < uniques; solution++){
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                stringNum = allAnswers[solution][i*9+j] - '0';
+                board[i][j].number = stringNum;
+            }
+        }
+        printf("Løsning nr.%d:\n", solution+1);
+        printBoard();
+
+    }
+    comments = 1;
+
+    return allAnswers;
 }
 
 int finished(void){
@@ -778,6 +865,7 @@ int main(void){
 
     printf("\nBrettet ser nå slik ut: \n");
     printBoard();
+
 
     while(!finished()){
         printChoices();

@@ -38,6 +38,8 @@ typedef struct values{
     int value2;
 } values;
 
+//om kommentarer skal være på eller av
+int comments = 1;
 
 //Brettet alle algoritmene jobber med/på(global variabel)
 coor board[9][9];
@@ -75,6 +77,12 @@ void printBoard(void);
 
 //Lar deg velge en koordinat du kan sjekke mulighetene til
 void printChoices(void);
+
+//lager en string av brettet
+char *boardToString(void);
+
+//sjekker om brettet er unikt
+int isUnique(char *board, char **boardArr);
 
 
 //------------Hjelpealgoritmer------------:
@@ -122,9 +130,8 @@ int shadowChoice(void);
 int rowcolFix(void);
 
 
-
 //kjører alle algoritmene i funksjonen
 int runAlgorithms(void);
 
 //Prøve og feile til den klarer å fullføre brettet
-int tester(void); 
+char **tester(void); 
