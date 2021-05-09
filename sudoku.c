@@ -549,6 +549,143 @@ int rowcolFix(void){
     return totalAnswers;
 }
 
+int removexyWings(int x, int y, int x2, int y2, int num){
+    int difference = 0;
+
+    if(x == x2){
+        for(int y3 = 0; y3 < 9; y3++){
+            if(y3 != y && y3 != y2){
+                if(board[y3][x].choices[num]){
+                    //printf("fjernet %d fra %d,%d\n", num+1, x+1, y3+1);
+                    board[y3][x].choices[num] = 0;
+                    difference++;
+                }
+            }
+        }
+    }
+    if(y == y2){
+        for(int x3 = 0; x3 < 9; x3++){
+            if(x3 != x && x3 != x2){
+                if(board[y][x3].choices[num]){
+                    //printf("fjernet %d fra %d,%d\n", num+1, x3+1, y+1);
+                    board[y][x3].choices[num] = 0;
+                    difference++;
+                }
+            }
+        }
+    }
+
+    return difference;
+}
+
+int xyWings(void){
+    int totalAnswers = 0;
+    int difference = 0;
+
+    coor2Ammount answers;
+    coor2Ammount answerCheck;
+    answers.ammount = 0; answers.locX = -1; answers.locX2 = -1; answers.locY = -1; answers.locY2 = -1;
+    answerCheck.ammount = 0; answerCheck.locX = -1; answerCheck.locX2 = -1; answerCheck.locY = -1; answerCheck.locY2 = -1;
+
+    for(int num = 0; num < 9; num++){
+        for(int x = 0; x < 8; x++){
+            for(int y = 0; y < 9; y++){
+                if(board[y][x].choices[num]){
+                    if(!answers.ammount){
+                        answers.locX = x;
+                        answers.locY = y;
+                    }else{
+                        answers.locX2 = x;
+                        answers.locY2 = y;
+                    }
+                    answers.ammount++;
+                }
+            }
+            if(answers.ammount == 2){
+                for(int x2 = x+1; x2 < 9; x2++){
+                    for(int y2 = 0; y2 < 9; y2++){
+                        if(board[y2][x2].choices[num]){
+                            if(!answerCheck.ammount){
+                                answerCheck.locX = x2;
+                                answerCheck.locY = y2;
+                            }else{
+                                answerCheck.locX2 = x2;
+                                answerCheck.locY2 = y2;
+                            }
+                            answerCheck.ammount++;
+
+                        }
+                    }
+                    if(answers.ammount == 2 && answerCheck.ammount == 2
+                    && answers.locY == answerCheck.locY && answers.locY2 == answerCheck.locY2){
+                        difference += removexyWings(answers.locX, answers.locY, answerCheck.locX, answerCheck.locY, num);
+                        difference += removexyWings(answers.locX2, answers.locY2, answerCheck.locX2, answerCheck.locY2, num);
+                    }
+                    if(difference){
+                        if(comments){
+                            printf("fant tallet %d i %d,%d og %d,%d og i %d,%d, %d,%d\n", num+1, answers.locX+1, answers.locY+1, 
+                            answers.locX2+1, answers.locY2+1, answerCheck.locX+1, answerCheck.locY+1, answerCheck.locX2+1, answerCheck.locY2+1);
+                        }
+                        totalAnswers++;
+                    }
+                    difference = 0;
+                    answerCheck.ammount = 0; answerCheck.locX = -1; answerCheck.locX2 = -1; answerCheck.locY = -1; answerCheck.locY2 = -1;
+                }
+            }
+            answers.ammount = 0; answers.locX = -1; answers.locX2 = -1; answers.locY = -1; answers.locY2 = -1;
+        }
+
+        for(int y = 0; y < 8; y++){
+            for(int x = 0; x < 9; x++){
+                if(board[y][x].choices[num]){
+                    if(!answers.ammount){
+                        answers.locX = x;
+                        answers.locY = y;
+                    }else{
+                        answers.locX2 = x;
+                        answers.locY2 = y;
+                    }
+                    answers.ammount++;
+                }
+            }
+            if(answers.ammount == 2){
+                for(int y2 = y+1; y2 < 9; y2++){
+                    for(int x2 = 0; x2 < 9; x2++){
+                        if(board[y2][x2].choices[num]){
+                            if(!answerCheck.ammount){
+                                answerCheck.locX = x2;
+                                answerCheck.locY = y2;
+                            }else{
+                                answerCheck.locX2 = x2;
+                                answerCheck.locY2 = y2;
+                            }
+                            answerCheck.ammount++;
+
+                        }
+                    }
+                    if(answers.ammount == 2 && answerCheck.ammount == 2
+                    && answers.locX == answerCheck.locX && answers.locX2 == answerCheck.locX2){
+                        difference += removexyWings(answers.locX, answers.locY, answerCheck.locX, answerCheck.locY, num);
+                        difference += removexyWings(answers.locX2, answers.locY2, answerCheck.locX2, answerCheck.locY2, num);
+                    }
+                    if(difference){
+                        if(comments){
+                            printf("fant tallet %d i %d,%d og %d,%d og i %d,%d, %d,%d\n", num+1, answers.locX+1, y+1, 
+                            answers.locX2+1, y+1, answerCheck.locX+1, y2+1, answerCheck.locX2+1, y2+1);
+                        }
+                        totalAnswers++;
+                    }
+                    difference = 0;
+                    answerCheck.ammount = 0; answerCheck.locX = -1; answerCheck.locX2 = -1; answerCheck.locY = -1; answerCheck.locY2 = -1;
+                }
+            }
+            answers.ammount = 0; answers.locX = -1; answers.locX2 = -1; answers.locY = -1; answers.locY2 = -1;
+        }
+    }
+
+    return totalAnswers;
+}
+
 void numberUpdate(int x, int y, int z, coorAmmount number[]){
     for(int i = 0; i < 3; i++){
         for(int j = 0; j < 3; j++){
@@ -783,6 +920,7 @@ char **tester(void){
     for(int i = 0; i < 100; i++){
         allAnswers[i] = "                                                                                 ";
     }
+    coorAmmount rightGuesses[100];
     char *boardString;
     coor copy[9][9];
     copyBoard(board,copy);
@@ -800,6 +938,7 @@ char **tester(void){
                             boardString = boardToString();
                             //printf("%s\n", boardString);
                             if(isUnique(boardString,allAnswers)){
+                                rightGuesses[uniques].ammount = num; rightGuesses[uniques].locX = x; rightGuesses[uniques].locY = y;
                                 printf("Tallet %d i (%d,%d) førte til en unik løsning\n", num+1, y+1, x+1);
                                 allAnswers[uniques] = boardString;
                                 uniques++;
@@ -817,19 +956,19 @@ char **tester(void){
     }
     printf("\nPrøvde %d forsøk. Fant %d løsninger, der %d er unike\n\n", tries, answers, uniques);
 
-    int stringNum;
-    for(int solution = 0; solution < uniques; solution++){
-        for(int i = 0; i < 9; i++){
-            for(int j = 0; j < 9; j++){
-                stringNum = allAnswers[solution][i*9+j] - '0';
-                board[i][j].number = stringNum;
-            }
-        }
-        printf("Løsning nr.%d:\n", solution+1);
+    comments = 1;
+    int x; int y; int num;
+    for(int guess = 0; guess < uniques; guess++){
+        copyBoard(copy,board);
+        x = rightGuesses[guess].locX; y = rightGuesses[guess].locY; num = rightGuesses[guess].ammount;
+        printf("tipper tallet: %d i (%d,%d)\n", num+1, y+1, x+1);
+        board[x][y].number = num+1;
+        updateChoices(x,y);
+        while(runAlgorithms());
+        printf("\nLøsning nr.%d:\n", guess+1);
         printBoard();
 
     }
-    comments = 1;
 
     return allAnswers;
 }
@@ -854,6 +993,7 @@ int runAlgorithms(void){
     totalAnswers += updatePair();
     totalAnswers += rowcolFix();
     totalAnswers += onlyTwo();
+    totalAnswers += xyWings();
 
     return totalAnswers;
 }

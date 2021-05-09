@@ -108,6 +108,9 @@ int rowcolUpdate(int x, int y, int first, int sec, int third, int num);
 //(Brukes i rowcolFix()) sjekker om det er 2 eller 3 tall som er funnet
 int updateRowCol(int x, int y, int first, int sec, int third, int z, int ammount);
 
+//(Brukes i xyWings()) fjerner mulighetene av tallet num i resten av kolonnen/raden
+int removexyWings(int x, int y, int x2, int y2, int num);
+
 
 //------------Løsealgoritmer------------:
 
@@ -128,6 +131,9 @@ int shadowChoice(void);
 
 //finner 2 eller 3 steder i en kolonne/rad der ett tall er
 int rowcolFix(void);
+
+//finner 4 steder(med 2 og 2 like xy koor) som som kun kan ha ett tall i seg pga raden
+int xyWings(void);
 
 
 //kjører alle algoritmene i funksjonen
